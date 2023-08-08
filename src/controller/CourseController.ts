@@ -1,25 +1,29 @@
 import { Request, Response } from "express"
 import { CourseBusiness } from "../business/CourseBusiness"
 import { BaseError } from "../errors/BaseError"
+import { ZodError } from "zod"
 
 export class CourseController {
+  constructor(private courseBusiness : CourseBusiness){}
   public getCourses = async (req: Request, res: Response) => {
     try {
       const input = {
-        q: req.query.q
+        q: req.query.q as string,
       }
 
-      const courseBusiness = new CourseBusiness()
-      const output = await courseBusiness.getCourses(input)
+      
+      const output = await this.courseBusiness.getCourses(input)
 
       res.status(200).send(output)
     } catch (error) {
-      console.log(error)
+      console.log(error);
 
-      if (error instanceof BaseError) {
-        res.status(error.statusCode).send(error.message)
+      if (error instanceof ZodError) {
+        res.status(400).send(error.issues);
+      } else if (error instanceof BaseError) {
+        res.status(error.statusCode).send(error.message);
       } else {
-        res.status(500).send("Erro inesperado")
+        res.status(500).send("Erro inesperado");
       }
     }
   }
@@ -33,17 +37,19 @@ export class CourseController {
         lessons: req.body.lessons
       }
 
-      const courseBusiness = new CourseBusiness()
-      const output = await courseBusiness.createCourse(input)
+      
+      const output = await this.courseBusiness.createCourse(input)
 
       res.status(201).send(output)
     } catch (error) {
-      console.log(error)
+      console.log(error);
 
-      if (error instanceof BaseError) {
-        res.status(error.statusCode).send(error.message)
+      if (error instanceof ZodError) {
+        res.status(400).send(error.issues);
+      } else if (error instanceof BaseError) {
+        res.status(error.statusCode).send(error.message);
       } else {
-        res.status(500).send("Erro inesperado")
+        res.status(500).send("Erro inesperado");
       }
     }
   }
@@ -58,17 +64,19 @@ export class CourseController {
         lessons: req.body.lessons
       }
 
-      const courseBusiness = new CourseBusiness()
-      const output = await courseBusiness.editCourse(input)
+      
+      const output = await this.courseBusiness.editCourse(input)
 
       res.status(200).send(output)
     } catch (error) {
-      console.log(error)
+      console.log(error);
 
-      if (error instanceof BaseError) {
-        res.status(error.statusCode).send(error.message)
+      if (error instanceof ZodError) {
+        res.status(400).send(error.issues);
+      } else if (error instanceof BaseError) {
+        res.status(error.statusCode).send(error.message);
       } else {
-        res.status(500).send("Erro inesperado")
+        res.status(500).send("Erro inesperado");
       }
     }
   }
@@ -80,17 +88,19 @@ export class CourseController {
         idToDelete: req.params.id
       }
 
-      const courseBusiness = new CourseBusiness()
-      const output = await courseBusiness.deleteCourse(input)
+      
+      const output = await this.courseBusiness.deleteCourse(input)
 
       res.status(200).send(output)
     } catch (error) {
-      console.log(error)
+      console.log(error);
 
-      if (error instanceof BaseError) {
-        res.status(error.statusCode).send(error.message)
+      if (error instanceof ZodError) {
+        res.status(400).send(error.issues);
+      } else if (error instanceof BaseError) {
+        res.status(error.statusCode).send(error.message);
       } else {
-        res.status(500).send("Erro inesperado")
+        res.status(500).send("Erro inesperado");
       }
     }
   }
